@@ -1,0 +1,998 @@
+<!DOCTYPE html>
+<html lang="ms" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="theme-color" content="#ea580c">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <title>JomMakan - Port Makan Seluruh Malaysia</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            -webkit-tap-highlight-color: transparent;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        /* Tema Warna Utama */
+        :root {
+            --primary: #ea580c;
+            --primary-dark: #c2410c;
+            --primary-light: #fff7ed;
+            --primary-border: #fed7aa;
+            --hero-from: #f59e0b;
+            --hero-to: #ea580c;
+        }
+        [data-theme="emerald"] {
+            --primary: #059669;
+            --primary-dark: #047857;
+            --primary-light: #ecfdf5;
+            --primary-border: #a7f3d0;
+            --hero-from: #10b981;
+            --hero-to: #047857;
+        }
+        [data-theme="indigo"] {
+            --primary: #4f46e5;
+            --primary-dark: #3730a3;
+            --primary-light: #eef2ff;
+            --primary-border: #c7d2fe;
+            --hero-from: #6366f1;
+            --hero-to: #312e81;
+        }
+        [data-theme="rose"] {
+            --primary: #e11d48;
+            --primary-dark: #be123c;
+            --primary-light: #fff1f2;
+            --primary-border: #fecdd3;
+            --hero-from: #fb7185;
+            --hero-to: #be123c;
+        }
+        [data-theme="midnight"] {
+            --primary: #f97316;
+            --primary-dark: #ea580c;
+            --primary-light: #27272a;
+            --primary-border: #3f3f46;
+            --hero-from: #ea580c;
+            --hero-to: #7c2d12;
+        }
+
+        /* Gaya Latar Belakang */
+        body.bg-clean { background-color: #f8fafc; }
+        body.dark.bg-clean { background-color: #09090b; }
+
+        body.bg-pattern {
+            background-color: #f8fafc;
+            background-image: radial-gradient(rgba(148, 163, 184, 0.25) 1px, transparent 1px);
+            background-size: 16px 16px;
+        }
+        body.dark.bg-pattern {
+            background-color: #09090b;
+            background-image: radial-gradient(rgba(255, 255, 255, 0.08) 1px, transparent 1px);
+            background-size: 16px 16px;
+        }
+
+        body.bg-gradient {
+            background: linear-gradient(135deg, #fff7ed 0%, #f1f5f9 50%, #ffedd5 100%);
+            background-attachment: fixed;
+        }
+        body.dark.bg-gradient {
+            background: linear-gradient(135deg, #18181b 0%, #09090b 50%, #1c1917 100%);
+            background-attachment: fixed;
+        }
+
+        .theme-bg { background-color: var(--primary); }
+        .theme-bg-hover:hover { background-color: var(--primary-dark); }
+        .theme-text { color: var(--primary); }
+        .theme-light-bg { background-color: var(--primary-light); }
+        .theme-border { border-color: var(--primary-border); }
+        .theme-hero { background: linear-gradient(135deg, var(--hero-from), var(--hero-to)); }
+
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+
+        @keyframes slideUp {
+            from { transform: translateY(100%); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+        .animate-slide-up { animation: slideUp 0.28s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+
+        @keyframes pulseRing {
+            0% { transform: scale(0.95); opacity: 0.7; }
+            50% { transform: scale(1.15); opacity: 0.2; }
+            100% { transform: scale(0.95); opacity: 0.7; }
+        }
+        .gps-pulse { animation: pulseRing 2s infinite; }
+    </style>
+</head>
+<body class="bg-clean text-slate-800 dark:text-slate-100 pb-24 antialiased">
+
+    <!-- Header Glassmorphism -->
+    <header class="sticky top-0 z-40 backdrop-blur-md bg-white/85 dark:bg-zinc-900/85 border-b border-slate-200/70 dark:border-zinc-800">
+        <div class="max-w-md mx-auto px-4 py-3 flex justify-between items-center">
+            <div class="flex items-center space-x-2.5">
+                <div class="w-9 h-9 rounded-xl theme-bg text-white flex items-center justify-center shadow-md">
+                    <i class="fa-solid fa-utensils text-base"></i>
+                </div>
+                <div>
+                    <h1 class="text-lg font-extrabold tracking-tight leading-none">JomMakan<span class="theme-text">.my</span></h1>
+                    <p class="text-[10px] font-medium text-slate-500 dark:text-slate-400 mt-0.5">Direktori Port Makan 14 Negeri</p>
+                </div>
+            </div>
+            <div class="flex items-center space-x-2">
+                <button onclick="openThemeModal()" title="Tukar Tema & Latar" class="w-9 h-9 rounded-full bg-slate-100 dark:bg-zinc-800 hover:bg-slate-200 dark:hover:bg-zinc-700 flex items-center justify-center text-slate-600 dark:text-slate-300 transition">
+                    <i class="fa-solid fa-palette text-sm"></i>
+                </button>
+                <button onclick="openAddModal()" class="theme-bg theme-bg-hover text-white text-xs px-3.5 py-2 rounded-full font-bold shadow-sm transition flex items-center space-x-1.5">
+                    <i class="fa-solid fa-plus text-[10px]"></i>
+                    <span>Tambah</span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Container -->
+    <main class="max-w-md mx-auto px-4 pt-4">
+
+        <!-- Hero Randomizer Card -->
+        <section class="theme-hero rounded-3xl p-5 text-white shadow-lg mb-4 relative overflow-hidden">
+            <div class="relative z-10">
+                <div class="flex items-center justify-between">
+                    <span class="bg-white/20 backdrop-blur-sm text-[10px] px-2.5 py-1 rounded-full font-bold uppercase tracking-wider">Buntu Nak Makan Apa?</span>
+                    <span id="activeStateBadge" class="bg-black/20 text-[10px] px-2.5 py-1 rounded-full font-semibold">Semua Negeri</span>
+                </div>
+                <h2 class="text-xl font-extrabold mt-2.5 leading-snug">Biar Sistem Pilih Port Padu!</h2>
+                <p class="text-white/85 text-xs mt-1">Rawak kedai makan ikut negeri atau lokasi terdekat anda.</p>
+                <button onclick="spinRandom()" id="spinBtn" class="mt-3.5 bg-white text-slate-900 hover:bg-slate-50 text-xs font-extrabold px-4 py-2.5 rounded-xl shadow-md transition active:scale-95 flex items-center space-x-2">
+                    <i id="diceIcon" class="fa-solid fa-dice theme-text text-sm"></i>
+                    <span>Pilih Rawak Sekarang</span>
+                </button>
+            </div>
+            <i class="fa-solid fa-bowl-food absolute -right-4 -bottom-5 text-8xl text-white/15 rotate-12 pointer-events-none"></i>
+        </section>
+
+        <!-- Lokasi GPS & Penapis Negeri -->
+        <div class="grid grid-cols-12 gap-2 mb-3">
+            <!-- Butang GPS Dekat Saya -->
+            <button onclick="toggleNearMe()" id="gpsBtn" class="col-span-5 bg-white dark:bg-zinc-900 border border-slate-200 dark:border-zinc-800 rounded-xl px-3 py-2.5 text-xs font-bold flex items-center justify-center space-x-1.5 shadow-sm transition">
+                <i id="gpsIcon" class="fa-solid fa-location-crosshairs theme-text"></i>
+                <span id="gpsBtnText" class="truncate">Dekat Saya</span>
+            </button>
+
+            <!-- Dropdown Negeri -->
+            <div class="col-span-7 relative">
+                <select id="stateFilter" onchange="setStateFilter(this.value)" class="w-full appearance-none bg-white dark:bg-zinc-900 border border-slate-200 dark:border-zinc-800 rounded-xl pl-3 pr-8 py-2.5 text-xs font-bold text-slate-700 dark:text-slate-200 focus:outline-none focus:ring-2 focus:ring-orange-500 shadow-sm">
+                    <option value="Semua">🇲🇾 Semua Negeri (56 Port)</option>
+                    <option value="Kedah">Kedah</option>
+                    <option value="Perlis">Perlis</option>
+                    <option value="Pulau Pinang">Pulau Pinang</option>
+                    <option value="Perak">Perak</option>
+                    <option value="Selangor">Selangor</option>
+                    <option value="Kuala Lumpur">Kuala Lumpur</option>
+                    <option value="Negeri Sembilan">Negeri Sembilan</option>
+                    <option value="Melaka">Melaka</option>
+                    <option value="Johor">Johor</option>
+                    <option value="Pahang">Pahang</option>
+                    <option value="Terengganu">Terengganu</option>
+                    <option value="Kelantan">Kelantan</option>
+                    <option value="Sabah">Sabah</option>
+                    <option value="Sarawak">Sarawak</option>
+                </select>
+                <i class="fa-solid fa-chevron-down text-[10px] text-slate-400 absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none"></i>
+            </div>
+        </div>
+
+        <!-- Status GPS Banner (Tersembunyi secara lalai) -->
+        <div id="gpsStatusBanner" class="hidden mb-3 bg-emerald-50 dark:bg-emerald-950/50 border border-emerald-200 dark:border-emerald-800/60 rounded-xl px-3 py-2 flex items-center justify-between text-[11px]">
+            <div class="flex items-center space-x-2 text-emerald-700 dark:text-emerald-300 font-semibold">
+                <span class="w-2 h-2 rounded-full bg-emerald-500 gps-pulse"></span>
+                <span id="gpsStatusText">Lokasi GPS aktif — Disusun dari paling dekat</span>
+            </div>
+            <button onclick="disableNearMe()" class="text-emerald-700 dark:text-emerald-400 underline font-bold ml-2">Tutup</button>
+        </div>
+
+        <!-- Bar Carian -->
+        <div class="relative mb-3">
+            <i class="fa-solid fa-magnifying-glass text-slate-400 text-xs absolute left-3.5 top-1/2 -translate-y-1/2"></i>
+            <input type="text" id="searchInput" oninput="renderRestaurants()" placeholder="Cari nama kedai, menu, daerah..." class="w-full pl-9 pr-9 py-2.5 bg-white dark:bg-zinc-900 border border-slate-200 dark:border-zinc-800 rounded-xl text-xs font-medium focus:outline-none focus:ring-2 focus:ring-orange-500 shadow-sm">
+            <button id="clearSearchBtn" onclick="clearSearch()" class="hidden text-slate-400 hover:text-slate-600 absolute right-3 top-1/2 -translate-y-1/2">
+                <i class="fa-solid fa-circle-xmark text-xs"></i>
+            </button>
+        </div>
+
+        <!-- Penapis Kategori (Horizontal Scroll) -->
+        <div class="flex space-x-2 overflow-x-auto pb-2 mb-2 no-scrollbar">
+            <button onclick="setCategory('Semua')" id="cat-Semua" class="cat-btn theme-bg text-white text-xs px-3.5 py-1.5 rounded-full font-bold whitespace-nowrap shadow-sm transition">Semua</button>
+            <button onclick="setCategory('Masakan Panas')" id="cat-Masakan Panas" class="cat-btn bg-white dark:bg-zinc-900 text-slate-600 dark:text-slate-300 border border-slate-200 dark:border-zinc-800 text-xs px-3.5 py-1.5 rounded-full font-semibold whitespace-nowrap transition">🔥 Masakan Panas</button>
+            <button onclick="setCategory('Nasi & Lauk')" id="cat-Nasi & Lauk" class="cat-btn bg-white dark:bg-zinc-900 text-slate-600 dark:text-slate-300 border border-slate-200 dark:border-zinc-800 text-xs px-3.5 py-1.5 rounded-full font-semibold whitespace-nowrap transition">🍛 Nasi & Lauk</button>
+            <button onclick="setCategory('Mee & Sup')" id="cat-Mee & Sup" class="cat-btn bg-white dark:bg-zinc-900 text-slate-600 dark:text-slate-300 border border-slate-200 dark:border-zinc-800 text-xs px-3.5 py-1.5 rounded-full font-semibold whitespace-nowrap transition">🍜 Mee & Sup</button>
+            <button onclick="setCategory('Sarapan')" id="cat-Sarapan" class="cat-btn bg-white dark:bg-zinc-900 text-slate-600 dark:text-slate-300 border border-slate-200 dark:border-zinc-800 text-xs px-3.5 py-1.5 rounded-full font-semibold whitespace-nowrap transition">☕ Sarapan</button>
+            <button onclick="setCategory('Western')" id="cat-Western" class="cat-btn bg-white dark:bg-zinc-900 text-slate-600 dark:text-slate-300 border border-slate-200 dark:border-zinc-800 text-xs px-3.5 py-1.5 rounded-full font-semibold whitespace-nowrap transition">🍔 Western</button>
+            <button onclick="setCategory('Kafe & Dessert')" id="cat-Kafe & Dessert" class="cat-btn bg-white dark:bg-zinc-900 text-slate-600 dark:text-slate-300 border border-slate-200 dark:border-zinc-800 text-xs px-3.5 py-1.5 rounded-full font-semibold whitespace-nowrap transition">🍰 Kafe & Dessert</button>
+        </div>
+
+        <!-- Penapis Bajet -->
+        <div class="flex space-x-1.5 overflow-x-auto pb-2 mb-3 no-scrollbar">
+            <button onclick="setBudget('Semua')" id="bud-Semua" class="bud-btn bg-slate-800 dark:bg-slate-200 text-white dark:text-slate-900 text-[11px] px-2.5 py-1 rounded-lg font-bold whitespace-nowrap transition">Semua Bajet</button>
+            <button onclick="setBudget('Bawah RM10')" id="bud-Bawah RM10" class="bud-btn bg-white dark:bg-zinc-900 text-slate-500 dark:text-slate-400 border border-slate-200 dark:border-zinc-800 text-[11px] px-2.5 py-1 rounded-lg font-semibold whitespace-nowrap transition">💵 Bawah RM10</button>
+            <button onclick="setBudget('RM10 - RM20')" id="bud-RM10 - RM20" class="bud-btn bg-white dark:bg-zinc-900 text-slate-500 dark:text-slate-400 border border-slate-200 dark:border-zinc-800 text-[11px] px-2.5 py-1 rounded-lg font-semibold whitespace-nowrap transition">💵💵 RM10 - RM20</button>
+            <button onclick="setBudget('Lebih RM20')" id="bud-Lebih RM20" class="bud-btn bg-white dark:bg-zinc-900 text-slate-500 dark:text-slate-400 border border-slate-200 dark:border-zinc-800 text-[11px] px-2.5 py-1 rounded-lg font-semibold whitespace-nowrap transition">💵💵💵 Lebih RM20</button>
+        </div>
+
+        <!-- Info Jumlah Hasil -->
+        <div class="flex justify-between items-center mb-3 px-0.5">
+            <p class="text-xs font-bold text-slate-500 dark:text-slate-400">Menunjukkan <span id="resultCount" class="theme-text font-extrabold">0</span> port makan</p>
+            <span id="sortLabel" class="text-[10px] font-semibold text-slate-400">Susunan: Pilihan Popular</span>
+        </div>
+
+        <!-- Senarai Kedai Makan -->
+        <div id="restaurantList" class="space-y-3.5"></div>
+
+        <!-- Empty State -->
+        <div id="emptyState" class="hidden text-center py-14 bg-white dark:bg-zinc-900 rounded-3xl border border-slate-200/70 dark:border-zinc-800">
+            <div class="w-14 h-14 rounded-full bg-slate-100 dark:bg-zinc-800 mx-auto flex items-center justify-center text-slate-400 text-xl mb-3">
+                <i class="fa-solid fa-store-slash"></i>
+            </div>
+            <p class="text-sm font-bold text-slate-700 dark:text-slate-200">Tiada port makan ditemui</p>
+            <p class="text-xs text-slate-400 mt-1 px-6">Cuba tukar penapis negeri, kategori, atau tambah port kegemaran anda sendiri.</p>
+            <button onclick="resetFilters()" class="mt-4 theme-bg text-white text-xs font-bold px-4 py-2 rounded-xl shadow-sm">Set Semula Penapis</button>
+        </div>
+
+    </main>
+
+    <!-- Bottom Navigation Bar -->
+    <nav class="fixed bottom-0 inset-x-0 z-40 backdrop-blur-lg bg-white/90 dark:bg-zinc-900/90 border-t border-slate-200/80 dark:border-zinc-800">
+        <div class="max-w-md mx-auto px-6 py-2 flex justify-between items-center">
+            <button onclick="switchTab('all')" id="nav-all" class="flex flex-col items-center space-y-1 theme-text font-bold transition">
+                <i class="fa-solid fa-compass text-lg"></i>
+                <span class="text-[10px]">Teroka</span>
+            </button>
+
+            <button onclick="openAddModal()" class="w-12 h-12 -mt-6 rounded-2xl theme-bg theme-bg-hover text-white shadow-lg flex items-center justify-center transition active:scale-95">
+                <i class="fa-solid fa-plus text-lg"></i>
+            </button>
+
+            <button onclick="switchTab('fav')" id="nav-fav" class="flex flex-col items-center space-y-1 text-slate-400 hover:text-slate-600 font-semibold transition relative">
+                <div class="relative">
+                    <i class="fa-solid fa-heart text-lg"></i>
+                    <span id="favBadge" class="hidden absolute -top-1.5 -right-2.5 bg-rose-500 text-white text-[9px] font-extrabold w-4 h-4 rounded-full flex items-center justify-center">0</span>
+                </div>
+                <span class="text-[10px]">Kegemaran</span>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Modal: Butiran Kedai & Navigasi -->
+    <div id="detailModal" class="fixed inset-0 bg-black/65 backdrop-blur-xs z-50 hidden flex items-end sm:items-center justify-center">
+        <div class="bg-white dark:bg-zinc-900 w-full max-w-md rounded-t-3xl sm:rounded-3xl overflow-hidden max-h-[90vh] flex flex-col animate-slide-up shadow-2xl">
+            <div class="relative h-48 w-full shrink-0">
+                <img id="modalImg" src="" alt="Makanan" class="w-full h-full object-cover">
+                <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent"></div>
+                <button onclick="closeDetailModal()" class="absolute top-4 right-4 w-9 h-9 rounded-full bg-black/50 text-white backdrop-blur-md flex items-center justify-center hover:bg-black/70 transition">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+                <div class="absolute bottom-3 left-4 right-4 text-white">
+                    <div class="flex items-center space-x-1.5 mb-1">
+                        <span id="modalState" class="theme-bg text-[10px] font-extrabold px-2 py-0.5 rounded-md uppercase"></span>
+                        <span id="modalCategory" class="bg-white/20 backdrop-blur-md text-[10px] font-bold px-2 py-0.5 rounded-md"></span>
+                        <span id="modalDistanceBadge" class="hidden bg-emerald-500 text-white text-[10px] font-extrabold px-2 py-0.5 rounded-md"></span>
+                    </div>
+                    <h3 id="modalName" class="text-lg font-extrabold leading-tight"></h3>
+                </div>
+            </div>
+
+            <div class="p-5 overflow-y-auto space-y-4">
+                <div class="flex items-start space-x-2 text-xs text-slate-600 dark:text-slate-300">
+                    <i class="fa-solid fa-location-dot theme-text mt-0.5"></i>
+                    <span id="modalLocation" class="font-medium"></span>
+                </div>
+
+                <div class="grid grid-cols-3 gap-2 bg-slate-50 dark:bg-zinc-800/80 p-3 rounded-2xl border border-slate-100 dark:border-zinc-800 text-center">
+                    <div>
+                        <p class="text-[10px] text-slate-400 font-semibold">Bajet</p>
+                        <p id="modalBudget" class="text-xs font-extrabold text-slate-800 dark:text-slate-100 mt-0.5"></p>
+                    </div>
+                    <div class="border-x border-slate-200 dark:border-zinc-700">
+                        <p class="text-[10px] text-slate-400 font-semibold">Rating</p>
+                        <p id="modalRating" class="text-xs font-extrabold text-amber-500 mt-0.5"></p>
+                    </div>
+                    <div>
+                        <p class="text-[10px] text-slate-400 font-semibold">Status</p>
+                        <p class="text-xs font-extrabold text-emerald-600 dark:text-emerald-400 mt-0.5">Halal</p>
+                    </div>
+                </div>
+
+                <div class="bg-slate-50 dark:bg-zinc-800/60 px-3.5 py-2.5 rounded-xl flex items-center justify-between text-xs">
+                    <span class="text-slate-500 dark:text-slate-400 font-semibold"><i class="fa-regular fa-clock mr-1.5"></i>Waktu Operasi</span>
+                    <span id="modalHours" class="font-bold text-slate-800 dark:text-slate-200"></span>
+                </div>
+
+                <div>
+                    <h4 class="text-[11px] font-extrabold text-slate-400 uppercase tracking-wider mb-1.5">Menu Wajib Cuba</h4>
+                    <p id="modalMenu" class="text-xs font-medium text-slate-700 dark:text-slate-200 theme-light-bg dark:bg-zinc-800 p-3 rounded-xl border theme-border dark:border-zinc-700"></p>
+                </div>
+
+                <div>
+                    <h4 class="text-[11px] font-extrabold text-slate-400 uppercase tracking-wider mb-1.5">Ulasan & Suasana</h4>
+                    <p id="modalNotes" class="text-xs text-slate-600 dark:text-slate-300 italic leading-relaxed"></p>
+                </div>
+
+                <div class="grid grid-cols-12 gap-2 pt-2">
+                    <button id="modalGoogleMapBtn" class="col-span-5 bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold py-3 rounded-xl transition flex items-center justify-center space-x-1.5 shadow-sm">
+                        <i class="fa-solid fa-map-location-dot"></i>
+                        <span>Google Maps</span>
+                    </button>
+                    <button id="modalWazeBtn" class="col-span-4 bg-sky-500 hover:bg-sky-600 text-white text-xs font-bold py-3 rounded-xl transition flex items-center justify-center space-x-1.5 shadow-sm">
+                        <i class="fa-brands fa-waze"></i>
+                        <span>Waze</span>
+                    </button>
+                    <button onclick="toggleModalFav()" class="col-span-3 border border-slate-200 dark:border-zinc-700 hover:bg-slate-50 dark:hover:bg-zinc-800 rounded-xl flex items-center justify-center transition">
+                        <i id="modalFavIcon" class="fa-regular fa-heart text-rose-500 text-base"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal: Tambah Port Makan Baharu -->
+    <div id="addModal" class="fixed inset-0 bg-black/65 z-50 hidden flex items-end sm:items-center justify-center">
+        <div class="bg-white dark:bg-zinc-900 w-full max-w-md rounded-t-3xl sm:rounded-3xl p-5 max-h-[92vh] overflow-y-auto animate-slide-up">
+            <div class="flex justify-between items-center mb-4">
+                <div>
+                    <h3 class="text-base font-extrabold">Tambah Port Makan Baharu</h3>
+                    <p class="text-[11px] text-slate-400">Kongsi kedai sedap di kawasan anda</p>
+                </div>
+                <button onclick="closeAddModal()" class="w-8 h-8 rounded-full bg-slate-100 dark:bg-zinc-800 flex items-center justify-center text-slate-500"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <form id="addForm" onsubmit="saveNewRestaurant(event)" class="space-y-3 text-xs">
+                <div>
+                    <label class="block font-bold text-slate-600 dark:text-slate-300 mb-1">Nama Kedai *</label>
+                    <input type="text" id="addName" required placeholder="Contoh: Warung Roti Canai Pak Tam" class="w-full px-3.5 py-2.5 bg-slate-50 dark:bg-zinc-800 border border-slate-200 dark:border-zinc-700 rounded-xl focus:outline-none focus:ring-2 focus:ring-orange-500">
+                </div>
+                <div class="grid grid-cols-2 gap-2.5">
+                    <div>
+                        <label class="block font-bold text-slate-600 dark:text-slate-300 mb-1">Negeri *</label>
+                        <select id="addState" class="w-full px-3 py-2.5 bg-slate-50 dark:bg-zinc-800 border border-slate-200 dark:border-zinc-700 rounded-xl focus:outline-none">
+                            <option value="Kedah">Kedah</option>
+                            <option value="Perlis">Perlis</option>
+                            <option value="Pulau Pinang">Pulau Pinang</option>
+                            <option value="Perak">Perak</option>
+                            <option value="Selangor">Selangor</option>
+                            <option value="Kuala Lumpur">Kuala Lumpur</option>
+                            <option value="Negeri Sembilan">Negeri Sembilan</option>
+                            <option value="Melaka">Melaka</option>
+                            <option value="Johor">Johor</option>
+                            <option value="Pahang">Pahang</option>
+                            <option value="Terengganu">Terengganu</option>
+                            <option value="Kelantan">Kelantan</option>
+                            <option value="Sabah">Sabah</option>
+                            <option value="Sarawak">Sarawak</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block font-bold text-slate-600 dark:text-slate-300 mb-1">Kategori *</label>
+                        <select id="addCategory" class="w-full px-3 py-2.5 bg-slate-50 dark:bg-zinc-800 border border-slate-200 dark:border-zinc-700 rounded-xl focus:outline-none">
+                            <option value="Masakan Panas">Masakan Panas</option>
+                            <option value="Nasi & Lauk">Nasi & Lauk</option>
+                            <option value="Mee & Sup">Mee & Sup</option>
+                            <option value="Sarapan">Sarapan</option>
+                            <option value="Western">Western</option>
+                            <option value="Kafe & Dessert">Kafe & Dessert</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="grid grid-cols-2 gap-2.5">
+                    <div>
+                        <label class="block font-bold text-slate-600 dark:text-slate-300 mb-1">Daerah / Bandar *</label>
+                        <input type="text" id="addLocation" required placeholder="Contoh: Pendang, Kedah" class="w-full px-3.5 py-2.5 bg-slate-50 dark:bg-zinc-800 border border-slate-200 dark:border-zinc-700 rounded-xl focus:outline-none">
+                    </div>
+                    <div>
+                        <label class="block font-bold text-slate-600 dark:text-slate-300 mb-1">Bajet *</label>
+                        <select id="addBudget" class="w-full px-3 py-2.5 bg-slate-50 dark:bg-zinc-800 border border-slate-200 dark:border-zinc-700 rounded-xl focus:outline-none">
+                            <option value="Bawah RM10">Bawah RM10</option>
+                            <option value="RM10 - RM20">RM10 - RM20</option>
+                            <option value="Lebih RM20">Lebih RM20</option>
+                        </select>
+                    </div>
+                </div>
+                <div>
+                    <label class="block font-bold text-slate-600 dark:text-slate-300 mb-1">Koordinat GPS (Pilihan)</label>
+                    <div class="flex space-x-2">
+                        <input type="text" id="addCoords" readonly placeholder="Tekan butang untuk rekod lokasi semasa" class="w-full px-3 py-2 bg-slate-100 dark:bg-zinc-800/50 border border-slate-200 dark:border-zinc-700 rounded-xl text-[11px] text-slate-500">
+                        <button type="button" onclick="captureCurrentLocationForForm()" class="shrink-0 bg-slate-800 dark:bg-slate-700 text-white px-3 py-2 rounded-xl font-bold text-[11px] flex items-center space-x-1">
+                            <i class="fa-solid fa-location-crosshairs"></i>
+                            <span>Guna Lokasi</span>
+                        </button>
+                    </div>
+                </div>
+                <div>
+                    <label class="block font-bold text-slate-600 dark:text-slate-300 mb-1">Waktu Operasi</label>
+                    <input type="text" id="addHours" placeholder="Contoh: 7.30 PG - 12.00 TGH" class="w-full px-3.5 py-2.5 bg-slate-50 dark:bg-zinc-800 border border-slate-200 dark:border-zinc-700 rounded-xl focus:outline-none">
+                </div>
+                <div>
+                    <label class="block font-bold text-slate-600 dark:text-slate-300 mb-1">Menu Popular *</label>
+                    <input type="text" id="addMenu" required placeholder="Contoh: Roti Canai Banjir, Teh Tarik Kaw" class="w-full px-3.5 py-2.5 bg-slate-50 dark:bg-zinc-800 border border-slate-200 dark:border-zinc-700 rounded-xl focus:outline-none">
+                </div>
+                <div>
+                    <label class="block font-bold text-slate-600 dark:text-slate-300 mb-1">Nota / Ulasan</label>
+                    <textarea id="addNotes" rows="2" placeholder="Kuah dal pekat, parking luas..." class="w-full px-3.5 py-2 bg-slate-50 dark:bg-zinc-800 border border-slate-200 dark:border-zinc-700 rounded-xl focus:outline-none"></textarea>
+                </div>
+                <button type="submit" class="w-full theme-bg theme-bg-hover text-white font-extrabold py-3 rounded-xl shadow-md transition">Simpan Port Makan</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal: Tetapan Tema & Latar Belakang -->
+    <div id="themeModal" class="fixed inset-0 bg-black/65 z-50 hidden flex items-end sm:items-center justify-center">
+        <div class="bg-white dark:bg-zinc-900 w-full max-w-md rounded-t-3xl sm:rounded-3xl p-5 animate-slide-up">
+            <div class="flex justify-between items-center mb-4">
+                <h3 class="text-base font-extrabold">Penyesuaian Tema & Data</h3>
+                <button onclick="closeThemeModal()" class="w-8 h-8 rounded-full bg-slate-100 dark:bg-zinc-800 flex items-center justify-center text-slate-500"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+
+            <div class="space-y-4">
+                <div>
+                    <p class="text-xs font-bold text-slate-500 dark:text-slate-400 mb-2">Pilih Warna Tema</p>
+                    <div class="grid grid-cols-5 gap-2">
+                        <button onclick="applyTheme('sunset')" class="flex flex-col items-center p-2 rounded-xl border border-slate-200 dark:border-zinc-700 hover:bg-slate-50 dark:hover:bg-zinc-800">
+                            <span class="w-7 h-7 rounded-full bg-orange-600 shadow-sm mb-1"></span>
+                            <span class="text-[10px] font-bold">Sunset</span>
+                        </button>
+                        <button onclick="applyTheme('emerald')" class="flex flex-col items-center p-2 rounded-xl border border-slate-200 dark:border-zinc-700 hover:bg-slate-50 dark:hover:bg-zinc-800">
+                            <span class="w-7 h-7 rounded-full bg-emerald-600 shadow-sm mb-1"></span>
+                            <span class="text-[10px] font-bold">Pandan</span>
+                        </button>
+                        <button onclick="applyTheme('indigo')" class="flex flex-col items-center p-2 rounded-xl border border-slate-200 dark:border-zinc-700 hover:bg-slate-50 dark:hover:bg-zinc-800">
+                            <span class="w-7 h-7 rounded-full bg-indigo-600 shadow-sm mb-1"></span>
+                            <span class="text-[10px] font-bold">Royal</span>
+                        </button>
+                        <button onclick="applyTheme('rose')" class="flex flex-col items-center p-2 rounded-xl border border-slate-200 dark:border-zinc-700 hover:bg-slate-50 dark:hover:bg-zinc-800">
+                            <span class="w-7 h-7 rounded-full bg-rose-600 shadow-sm mb-1"></span>
+                            <span class="text-[10px] font-bold">Bandung</span>
+                        </button>
+                        <button onclick="applyTheme('midnight')" class="flex flex-col items-center p-2 rounded-xl border border-slate-200 dark:border-zinc-700 hover:bg-slate-50 dark:hover:bg-zinc-800">
+                            <span class="w-7 h-7 rounded-full bg-zinc-900 border border-zinc-600 shadow-sm mb-1"></span>
+                            <span class="text-[10px] font-bold">Gelap</span>
+                        </button>
+                    </div>
+                </div>
+
+                <div>
+                    <p class="text-xs font-bold text-slate-500 dark:text-slate-400 mb-2">Gaya Latar Belakang</p>
+                    <div class="grid grid-cols-3 gap-2 text-xs font-bold">
+                        <button onclick="applyBgStyle('bg-clean')" class="py-2.5 px-3 rounded-xl border border-slate-200 dark:border-zinc-700 hover:bg-slate-50 dark:hover:bg-zinc-800">Bersih</button>
+                        <button onclick="applyBgStyle('bg-pattern')" class="py-2.5 px-3 rounded-xl border border-slate-200 dark:border-zinc-700 hover:bg-slate-50 dark:hover:bg-zinc-800">Corak Halus</button>
+                        <button onclick="applyBgStyle('bg-gradient')" class="py-2.5 px-3 rounded-xl border border-slate-200 dark:border-zinc-700 hover:bg-slate-50 dark:hover:bg-zinc-800">Gradien</button>
+                    </div>
+                </div>
+
+                <div class="pt-3 border-t border-slate-200 dark:border-zinc-800">
+                    <button onclick="resetDatabase()" class="w-full py-2.5 px-4 rounded-xl bg-slate-100 dark:bg-zinc-800 hover:bg-slate-200 dark:hover:bg-zinc-700 text-xs font-bold text-slate-700 dark:text-slate-300 flex items-center justify-center space-x-2">
+                        <i class="fa-solid fa-rotate"></i>
+                        <span>Muat Semula 56+ Data Kedai Terkini</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Gambar Makanan Mengikut Kategori
+        const categoryImages = {
+            "Masakan Panas": "https://images.unsplash.com/photo-1563245372-f21724e3856d?auto=format&fit=crop&w=600&q=80",
+            "Nasi & Lauk": "https://images.unsplash.com/photo-1589302168068-964664d93dc0?auto=format&fit=crop&w=600&q=80",
+            "Mee & Sup": "https://images.unsplash.com/photo-1569718212165-3a8278d5f624?auto=format&fit=crop&w=600&q=80",
+            "Sarapan": "https://images.unsplash.com/photo-1533089860892-a7c6f0a88666?auto=format&fit=crop&w=600&q=80",
+            "Western": "https://images.unsplash.com/photo-1568901346375-23c9450c58cd?auto=format&fit=crop&w=600&q=80",
+            "Kafe & Dessert": "https://images.unsplash.com/photo-1551024601-bec78aea704b?auto=format&fit=crop&w=600&q=80"
+        };
+
+        // Pangkalan Data 56 Port Makan Seluruh 14 Negeri Malaysia (Lengkap Koordinat GPS)
+        const defaultRestaurants = [
+            // KEDAH (6)
+            { id: 101, name: "Warung Bihun Sup Utara Pak Ali", state: "Kedah", category: "Mee & Sup", location: "Pekan Pendang, Kedah", budget: "Bawah RM10", rating: "4.8", hours: "3.00 PTG - 11.00 MLM", menu: "Bihun sup daging utara, sambal kicap merah, cucur udang.", notes: "Port legend orang Pendang. Kuah sup daging pekat dan wangi.", lat: 5.9936, lng: 100.4764 },
+            { id: 102, name: "Restoran Tomyam Simpang Empat", state: "Kedah", category: "Masakan Panas", location: "Simpang Empat, Kedah", budget: "RM10 - RM20", rating: "4.7", hours: "5.00 PTG - 2.00 PAGI", menu: "Tomyam campur kaw, siakap stim limau, kailan ikan masin.", notes: "Sesuai untuk makan malam keluarga atau supper lewat malam.", lat: 6.0264, lng: 100.3822 },
+            { id: 103, name: "Nasi Lemak Royale Hijau Kuning", state: "Kedah", category: "Nasi & Lauk", location: "Alor Setar, Kedah", budget: "Bawah RM10", rating: "4.9", hours: "4.00 PTG - 1.00 PAGI", menu: "Nasi kuning, ayam goreng berempah, kuah campur hitam.", notes: "Ikonik Alor Setar. Wajib beratur awal kalau nak ayam panas.", lat: 6.1248, lng: 100.3678 },
+            { id: 104, name: "Gulai Temenung Kuala Muda", state: "Kedah", category: "Nasi & Lauk", location: "Kota Kuala Muda, Kedah", budget: "RM10 - RM20", rating: "4.8", hours: "11.00 PG - 4.00 PTG", menu: "Gulai ikan temenung segar, ulam-ulaman kampung, sambal belacan.", notes: "Ikan segar terus dari bot nelayan bersebelahan pasar bisik.", lat: 5.5812, lng: 100.3435 },
+            { id: 105, name: "Laksa Ikan Sekoq Mergong", state: "Kedah", category: "Mee & Sup", location: "Mergong, Alor Setar", budget: "Bawah RM10", rating: "4.7", hours: "12.00 TGH - 7.00 MLM", menu: "Laksa kuah pekat dengan seekor ikan kembung rebus.", notes: "Port wajib singgah bila turun ke Alor Setar.", lat: 6.1352, lng: 100.3489 },
+            { id: 106, name: "Nasi Dagang Pak Malau", state: "Kedah", category: "Sarapan", location: "Makam Mahsuri, Langkawi", budget: "RM10 - RM20", rating: "4.8", hours: "8.00 PG - 2.00 PTG", menu: "Nasi dagang gulai ikan tongkol, kerutup daging, pemandangan sawah.", notes: "Sarapan berlatarbelakangkan sawah padi dan Gunung Raya.", lat: 6.3324, lng: 99.7845 },
+
+            // PERLIS (4)
+            { id: 201, name: "Anjung Keli Kangar", state: "Perlis", category: "Nasi & Lauk", location: "Kangar, Perlis", budget: "RM10 - RM20", rating: "4.8", hours: "11.00 PG - 4.30 PTG", menu: "Keli bakar cicah air asam, kerabu bronok, gulai daging.", notes: "Pilihan lauk tengah hari paling meriah di Perlis.", lat: 6.4414, lng: 100.1986 },
+            { id: 202, name: "Laksa Kak Su Kuala Perlis", state: "Perlis", category: "Mee & Sup", location: "Kuala Perlis, Perlis", budget: "Bawah RM10", rating: "4.7", hours: "11.30 PG - 6.30 PTG", menu: "Laksa beras Kuala Perlis dimakan bersama pulut udang.", notes: "Kombinasi unik laksa dan pulut panggang.", lat: 6.4012, lng: 100.1325 },
+            { id: 203, name: "Warung Tepi Sawah Bintong", state: "Perlis", category: "Sarapan", location: "Bintong, Kangar", budget: "Bawah RM10", rating: "4.8", hours: "7.30 PG - 12.00 TGH", menu: "Peknga nyok gulai ikan, roti canai sarang burung, kopi kampung.", notes: "Suasana pagi berangin di tepi bendang Perlis.", lat: 6.4589, lng: 100.1812 },
+            { id: 204, name: "Medan Ikan Bakar Kuala Perlis", state: "Perlis", category: "Masakan Panas", location: "Kompleks LKIM, Kuala Perlis", budget: "Lebih RM20", rating: "4.6", hours: "5.30 PTG - 12.00 MLM", menu: "Siakap bakar sambal petai, sotong celup tepung, ketam masak lemak.", notes: "Makan malam makanan laut segar tepi muara.", lat: 6.3985, lng: 100.1298 },
+
+            // PULAU PINANG (4)
+            { id: 301, name: "Nasi Kandar Deen Maju", state: "Pulau Pinang", category: "Nasi & Lauk", location: "Jalan Gurdwara, George Town", budget: "RM10 - RM20", rating: "4.9", hours: "12.00 TGH - 10.00 MLM", menu: "Ayam ros, telur sotong, kuah banjir campur.", notes: "Antara nasi kandar paling padu di Penang.", lat: 5.4112, lng: 100.3289 },
+            { id: 302, name: "Penang Road Famous Laksa", state: "Pulau Pinang", category: "Mee & Sup", location: "Lebuh Keng Kwee, George Town", budget: "Bawah RM10", rating: "4.7", hours: "9.00 PG - 5.30 PTG", menu: "Asam laksa Penang pekat dengan otak udang.", notes: "Boleh terus pekena cendol di sebelah kedai.", lat: 5.4171, lng: 100.3306 },
+            { id: 303, name: "Hameed Pata Mee Sotong", state: "Pulau Pinang", category: "Masakan Panas", location: "Esplanade Park, George Town", budget: "Bawah RM10", rating: "4.8", hours: "11.30 PG - 8.00 MLM", menu: "Mee goreng sotong sambal, coconut shake.", notes: "Pedas manis sambal sotong memang ketagih.", lat: 5.4204, lng: 100.3418 },
+            { id: 304, name: "Roti Canai Transfer Road", state: "Pulau Pinang", category: "Sarapan", location: "Jalan Transfer, George Town", budget: "Bawah RM10", rating: "4.6", hours: "7.00 PG - 12.00 TGH", menu: "Roti bakar banjir kuah kari ayam seketul.", notes: "Port sarapan wajib pelancong di pulau.", lat: 5.4215, lng: 100.3312 },
+
+            // PERAK (4)
+            { id: 401, name: "Nasi Ganja Yong Suan", state: "Perak", category: "Nasi & Lauk", location: "Jalan Yang Kalsom, Ipoh", budget: "RM10 - RM20", rating: "4.8", hours: "9.30 PG - 6.00 PTG", menu: "Nasi putih, ayam merah, sambal kelapa, telur masin.", notes: "Menu ikonik bandar raya Ipoh sejak puluhan tahun.", lat: 4.5934, lng: 101.0842 },
+            { id: 402, name: "Mee Udang Banjir Kuala Sepetang", state: "Perak", category: "Mee & Sup", location: "Kuala Sepetang, Taiping", budget: "RM10 - RM20", rating: "4.7", hours: "11.30 PG - 10.00 MLM", menu: "Mee udang galah / udang laut segar melimpah.", notes: "Udang manis segar terus dari jeti Kuala Sepetang.", lat: 4.8365, lng: 100.6289 },
+            { id: 403, name: "Canning Dim Sum Ipoh (Halal)", state: "Perak", category: "Sarapan", location: "Taman Canning, Ipoh", budget: "RM10 - RM20", rating: "4.8", hours: "7.30 PG - 3.30 PTG", menu: "Siew mai ayam, pau telur masin, chee cheong fun.", notes: "Restoran dim sum halal paling popular di Perak.", lat: 4.6078, lng: 101.1145 },
+            { id: 404, name: "Kopi Chang Jiang White Coffee", state: "Perak", category: "Kafe & Dessert", location: "Jalan Windsor, Ipoh", budget: "RM10 - RM20", rating: "4.7", hours: "8.00 PG - 6.00 PTG", menu: "Ipoh White Coffee kaw, roti bakar mentega kaya.", notes: "Kafe gaya kolonial klasik dengan kopi Ipoh asli.", lat: 4.5889, lng: 101.0885 },
+
+            // SELANGOR (4)
+            { id: 501, name: "Sate Kajang Hj Samuri", state: "Selangor", category: "Masakan Panas", location: "Bandar Kajang, Selangor", budget: "RM10 - RM20", rating: "4.6", hours: "11.00 PG - 11.30 MLM", menu: "Sate ayam, daging, perut dengan kuah kacang sambal.", notes: "Destinasi wajib kalau singgah Kajang.", lat: 2.9935, lng: 101.7874 },
+            { id: 502, name: "Restoran Cendol Bakar Kuala Selangor", state: "Selangor", category: "Kafe & Dessert", location: "Assam Jawa, Kuala Selangor", budget: "Bawah RM10", rating: "4.7", hours: "10.00 PG - 7.00 PTG", menu: "Cendol gula melaka bakar, rojak pasembur.", notes: "Port singgah segar lepas jalan-jalan di Sekinchan.", lat: 3.3012, lng: 101.2945 },
+            { id: 503, name: "Nasi Lemak Saleha", state: "Selangor", category: "Sarapan", location: "Kampung Pandan / Ampang", budget: "Bawah RM10", rating: "4.8", hours: "7.00 PG - 11.00 MLM", menu: "Nasi lemak sambal sotong, rendang daging, ayam goreng.", notes: "Nasi lemak berlemak wangi dengan sambal seimbang.", lat: 3.1445, lng: 101.7342 },
+            { id: 504, name: "Me'nate Steak Hub Shah Alam", state: "Selangor", category: "Western", location: "Seksyen 14, Shah Alam", budget: "Lebih RM20", rating: "4.8", hours: "11.00 PG - 11.00 MLM", menu: "Wagyu steak, lamb rack, grilled salmon.", notes: "Pilihan steakhouse premium mesra keluarga.", lat: 3.0715, lng: 101.5218 },
+
+            // KUALA LUMPUR (4)
+            { id: 601, name: "Nasi Lemak Wanjo Kampung Baru", state: "Kuala Lumpur", category: "Nasi & Lauk", location: "Kampung Baru, Kuala Lumpur", budget: "RM10 - RM20", rating: "4.7", hours: "6.30 PG - 12.00 MLM", menu: "Nasi lemak ayam goreng berempah, sambal paru, bergedil.", notes: "Port ikonik berlatarbelakangkan Menara KLCC.", lat: 3.1642, lng: 101.7038 },
+            { id: 602, name: "Village Park Restaurant", state: "Kuala Lumpur", category: "Sarapan", location: "Damansara Utama", budget: "RM10 - RM20", rating: "4.9", hours: "6.30 PG - 5.30 PTG", menu: "Nasi lemak ayam goreng rangup serdak wangi.", notes: "Antara nasi lemak paling terkenal di Lembah Klang.", lat: 3.1378, lng: 101.6225 },
+            { id: 603, name: "Ikan Bakar Jalan Bellamy", state: "Kuala Lumpur", category: "Nasi & Lauk", location: "Bukit Petaling, Kuala Lumpur", budget: "RM10 - RM20", rating: "4.7", hours: "11.00 PG - 4.00 PTG", menu: "Ikan pari bakar, sotong bakar, air asam kerisik.", notes: "Makan tengah hari panas-panas di tengah pusat bandar.", lat: 3.1312, lng: 101.6989 },
+            { id: 604, name: "Kafe Kleptokrat", state: "Kuala Lumpur", category: "Kafe & Dessert", location: "Jalan Tun H S Lee, KL", budget: "Lebih RM20", rating: "4.6", hours: "10.00 PG - 9.00 MLM", menu: "Onde-onde cake, laksa Johor, kopi artisan.", notes: "Kafe estetik dengan kolam renang di tengah bangunan warisan.", lat: 3.1448, lng: 101.6965 },
+
+            // NEGERI SEMBILAN (4)
+            { id: 701, name: "Restoran Warisan Salai", state: "Negeri Sembilan", category: "Nasi & Lauk", location: "Ulu Bendul, Kuala Pilah", budget: "RM10 - RM20", rating: "4.8", hours: "10.30 PG - 5.30 PTG", menu: "Daging salai masak lemak cili api, keli salai, pucuk ubi.", notes: "Rasa salai kayu api asli yang beraroma.", lat: 2.7289, lng: 102.0785 },
+            { id: 702, name: "Cendol Songkok Tinggi", state: "Negeri Sembilan", category: "Kafe & Dessert", location: "Seremban, Negeri Sembilan", budget: "Bawah RM10", rating: "4.7", hours: "11.00 PG - 6.00 PTG", menu: "Cendol pulut durian, pasembur.", notes: "Legend di Seremban, pekena waktu tengah hari panas.", lat: 2.7258, lng: 101.9424 },
+            { id: 703, name: "Mee Kari Power Kak Yah", state: "Negeri Sembilan", category: "Mee & Sup", location: "Senawang, Seremban", budget: "Bawah RM10", rating: "4.7", hours: "8.00 PG - 5.00 PTG", menu: "Mee kari kerang melimpah, tauhu pok, sambal tumis.", notes: "Kuah kari pekat berlemak yang memikat selera.", lat: 2.7015, lng: 101.9812 },
+            { id: 704, name: "Ikan Bakar Terapung Port Dickson", state: "Negeri Sembilan", category: "Masakan Panas", location: "Teluk Kemang, Port Dickson", budget: "Lebih RM20", rating: "4.6", hours: "5.00 PTG - 12.00 MLM", menu: "Jenahak bakar, udang butter prawn, ketam berlada.", notes: "Makan malam sambil menikmati bayu laut Selat Melaka.", lat: 2.4542, lng: 101.8568 },
+
+            // MELAKA (4)
+            { id: 801, name: "Asam Pedas Claypot Kota Laksamana", state: "Melaka", category: "Nasi & Lauk", location: "Kota Laksamana, Melaka", budget: "RM10 - RM20", rating: "4.8", hours: "5.00 PTG - 2.00 PAGI", menu: "Asam pedas pari claypot, telur dadar, sayur kangkung.", notes: "Kuah asam pedas pekat menyengat dihidang dalam periuk tanah.", lat: 2.1965, lng: 102.2412 },
+            { id: 802, name: "Klebang Original Coconut Shake", state: "Melaka", category: "Kafe & Dessert", location: "Pantai Klebang, Melaka", budget: "Bawah RM10", rating: "4.8", hours: "11.00 PG - 6.30 PTG", menu: "Coconut shake special dengan aiskrim vanila, kuih keria.", notes: "Minuman wajib sejukkan tekak di Melaka.", lat: 2.2145, lng: 102.2015 },
+            { id: 803, name: "Kuih Keria Antarabangsa Hj Jalil", state: "Melaka", category: "Kafe & Dessert", location: "Limbongan, Melaka", budget: "Bawah RM10", rating: "4.7", hours: "1.00 PTG - 6.00 PTG", menu: "Kuih keria sira gula melaka lembut di dalam.", notes: "Manis gula melaka asli yang melekat elok.", lat: 2.2058, lng: 102.2289 },
+            { id: 804, name: "Ikan Bakar Muara Sungai Duyung", state: "Melaka", category: "Masakan Panas", location: "Permatang Pasir, Melaka", budget: "Lebih RM20", rating: "4.7", hours: "5.00 PTG - 11.30 MLM", menu: "Ikan siakap bakar sambal, kupang goreng cili, nasi lemak.", notes: "Port ikan bakar popular di muara sungai.", lat: 2.1789, lng: 102.2912 },
+
+            // JOHOR (4)
+            { id: 901, name: "Kacang Pool Haji Larkin", state: "Johor", category: "Sarapan", location: "Larkin Bomba, Johor Bahru", budget: "Bawah RM10", rating: "4.9", hours: "7.00 PG - 12.00 MLM", menu: "Kacang pool daging cincang, telur mata, roti bakar tebal.", notes: "Ikon sarapan dan minum petang bangsa Johor.", lat: 1.4945, lng: 103.7432 },
+            { id: 902, name: "Mee Rebus Haji Wahid", state: "Johor", category: "Mee & Sup", location: "Plaza Angsana, Johor Bahru", budget: "Bawah RM10", rating: "4.8", hours: "10.00 PG - 9.00 MLM", menu: "Mee rebus kuah keledek pekat dengan kriuk-kriuk udang.", notes: "Resipi turun-temurun yang kekal padu.", lat: 1.4958, lng: 103.7065 },
+            { id: 903, name: "Nasi Briyani Gam Batu Pahat", state: "Johor", category: "Nasi & Lauk", location: "Peserai, Batu Pahat", budget: "RM10 - RM20", rating: "4.8", hours: "10.30 PG - 4.00 PTG", menu: "Nasi briyani gam kambing / ayam merah, dalca, acar buah.", notes: "Daging kambing empuk dimasak sekali di dalam periuk nasi.", lat: 1.8542, lng: 102.9215 },
+            { id: 904, name: "Murtabak Kampung Melayu Majidee", state: "Johor", category: "Masakan Panas", location: "Kampung Melayu Majidee, JB", budget: "RM10 - RM20", rating: "4.7", hours: "12.00 TGH - 11.00 MLM", menu: "Murtabak cheese daging tebal, sos bawang merah.", notes: "Murtabak berlapis daging penuh yang sangat mengenyangkan.", lat: 1.5124, lng: 103.7489 },
+
+            // PAHANG (4)
+            { id: 1001, name: "Gobang Maju Patin Tempoyak", state: "Pahang", category: "Nasi & Lauk", location: "Temerloh, Pahang", budget: "RM10 - RM20", rating: "4.9", hours: "10.30 PG - 4.30 PTG", menu: "Gulai patin tempoyak sangkar sungai, pais patin, sambal hitam.", notes: "Kuah tempoyak pekat manis masam tanpa bau hanyir.", lat: 3.4485, lng: 102.4189 },
+            { id: 1002, name: "Satay Zul Kuantan", state: "Pahang", category: "Masakan Panas", location: "Jalan Teluk Sisek, Kuantan", budget: "RM10 - RM20", rating: "4.7", hours: "5.00 PTG - 11.30 MLM", menu: "Satay daging lembut berjus, satay ayam, nasi impit.", notes: "Port makan malam santai paling terkenal di Kuantan.", lat: 3.8125, lng: 103.3389 },
+            { id: 1003, name: "Kula Cakes Kuantan", state: "Pahang", category: "Kafe & Dessert", location: "Jalan Besar, Kuantan", budget: "RM10 - RM20", rating: "4.8", hours: "11.00 PG - 6.30 PTG", menu: "Mango cheesecake signature, pandan gula melaka cake.", notes: "Kek keju mangga segar yang menjadi buruan pelancong.", lat: 3.8065, lng: 103.3285 },
+            { id: 1004, name: "KHM Strawberries & Jam", state: "Pahang", category: "Kafe & Dessert", location: "Taman Sedia, Cameron Highlands", budget: "RM10 - RM20", rating: "4.8", hours: "8.30 PG - 6.00 PTG", menu: "Scone panas dengan jem strawberi segar, nasi lemak sambal strawberi.", notes: "Menikmati scone hangat dalam cuaca sejuk tanah tinggi.", lat: 4.4812, lng: 101.3745 },
+
+            // TERENGGANU (4)
+            { id: 1101, name: "Nasi Dagang Atas Tol", state: "Terengganu", category: "Sarapan", location: "Kampung Atas Tol, Kuala Terengganu", budget: "Bawah RM10", rating: "4.9", hours: "6.30 PG - 12.00 TGH", menu: "Nasi dagang gulai ikan aya, telur rebus, teh tarik ombak.", notes: "Sarapan ikonik Terengganu di bawah rimbunan pokok.", lat: 5.2745, lng: 103.1125 },
+            { id: 1102, name: "Keropok Lekor Losong Haji Su", state: "Terengganu", category: "Kafe & Dessert", location: "Kampung Losong, Kuala Terengganu", budget: "Bawah RM10", rating: "4.8", hours: "9.00 PG - 6.30 PTG", menu: "Keropok lekor rebus dan goreng panas, sos pencicah pekat.", notes: "Rasa ikan segar yang padat dan lembut.", lat: 5.3189, lng: 103.1185 },
+            { id: 1103, name: "Warung Pok Nong Celup Tepung", state: "Terengganu", category: "Masakan Panas", location: "Mengabang Telipot, Kuala Nerus", budget: "RM10 - RM20", rating: "4.8", hours: "3.30 PTG - 7.30 MLM", menu: "Sotong, udang dan ikan celup tepung rangup tepi pantai.", notes: "Sotong bersaiz besar digoreng rangup panas-panas.", lat: 5.4185, lng: 103.0812 },
+            { id: 1104, name: "Fauzi Nasi Kerabu", state: "Terengganu", category: "Sarapan", location: "Jalan Sultan Sulaiman, KT", budget: "Bawah RM10", rating: "4.7", hours: "6.30 PG - 1.30 PTG", menu: "Nasi kerabu daging bakar, solok lada, bawang putih jeruk.", notes: "Nasi kerabu biru asli dengan ulam segar.", lat: 5.3265, lng: 103.1368 },
+
+            // KELANTAN (4)
+            { id: 1201, name: "Nasi Kerabu Golok Kak Yah", state: "Kelantan", category: "Sarapan", location: "Kota Bharu, Kelantan", budget: "Bawah RM10", rating: "4.9", hours: "7.00 PG - 1.00 PTG", menu: "Nasi kerabu tumis, kambing bakar, solok lada, telur masin.", notes: "Kombinasi budu, tumis dan ulam yang cukup rasa.", lat: 6.1254, lng: 102.2381 },
+            { id: 1202, name: "Kopitiam Kita", state: "Kelantan", category: "Sarapan", location: "Taman Desa Jaya, Kota Bharu", budget: "RM10 - RM20", rating: "4.8", hours: "6.30 PG - 2.00 PTG", menu: "Roti Titab original, nasi tumpang, nasi berlauk pagi.", notes: "Port wajib sarapan bila jejak kaki di Kota Bharu.", lat: 6.1189, lng: 102.2542 },
+            { id: 1203, name: "Nasi Ulam Cikgu Kampung Kraftangan", state: "Kelantan", category: "Nasi & Lauk", location: "Bandar Kota Bharu, Kelantan", budget: "RM10 - RM20", rating: "4.8", hours: "11.00 PG - 5.00 PTG", menu: "Puluhan jenis ulam kampung, ikan keli goreng, budu tempoyak.", notes: "Syurga peminat ulam-ulaman segar.", lat: 6.1312, lng: 102.2365 },
+            { id: 1204, name: "Sup Belut & Colek Pasir Mas", state: "Kelantan", category: "Mee & Sup", location: "Pasir Mas, Kelantan", budget: "RM10 - RM20", rating: "4.7", hours: "4.00 PTG - 12.00 MLM", menu: "Sup belut berempah, colek buah, colek ayam.", notes: "Port santai malam yang sangat meriah.", lat: 6.0425, lng: 102.1412 },
+
+            // SABAH (4)
+            { id: 1301, name: "Pasar Malam Todak Waterfront", state: "Sabah", category: "Masakan Panas", location: "Kota Kinabalu, Sabah", budget: "Lebih RM20", rating: "4.8", hours: "5.00 PTG - 12.00 MLM", menu: "Udang harimau bakar, ikan kerapu stim, rumpai laut latok.", notes: "Makanan laut segar sambil melihat matahari terbenam.", lat: 5.9825, lng: 116.0712 },
+            { id: 1302, name: "Restoran Sri Melaka KK (Halal)", state: "Sabah", category: "Masakan Panas", location: "Kampung Air, Kota Kinabalu", budget: "RM10 - RM20", rating: "4.7", hours: "11.00 PG - 10.00 MLM", menu: "Sayur manis Sabah goreng belacan, ketam masak telur masin.", notes: "Sayur pucuk manis Sabah wajib cuba di sini.", lat: 5.9789, lng: 116.0745 },
+            { id: 1303, name: "Kedai Kopi Yee Fung (Halal)", state: "Sabah", category: "Mee & Sup", location: "Gaya Street, Kota Kinabalu", budget: "RM10 - RM20", rating: "4.8", hours: "6.30 PG - 5.00 PTG", menu: "Laksa Sabah kuah lemak udang, claypot chicken rice.", notes: "Kuah laksa pekat berempah yang memikat pelancong.", lat: 5.9845, lng: 116.0768 },
+            { id: 1304, name: "Soto Makassar Sembulan", state: "Sabah", category: "Mee & Sup", location: "Sembulan, Kota Kinabalu", budget: "Bawah RM10", rating: "4.7", hours: "8.00 PG - 8.00 MLM", menu: "Soto daging urat, burasak, sambal cili limau.", notes: "Sup daging hangat sesuai dimakan bila-bila masa.", lat: 5.9665, lng: 116.0689 },
+
+            // SARAWAK (4)
+            { id: 1401, name: "Mee Kolok Haji Salleh", state: "Sarawak", category: "Mee & Sup", location: "Jalan Satok, Kuching", budget: "Bawah RM10", rating: "4.9", hours: "7.00 PG - 4.00 PTG", menu: "Mee kolok daging istimewa, mee sapi, sup tulang.", notes: "Mee kenyal dengan hirisan daging empuk dan minyak bawang.", lat: 1.5542, lng: 110.3345 },
+            { id: 1402, name: "Mom's Laksa Cafe", state: "Sarawak", category: "Mee & Sup", location: "Petra Jaya, Kuching", budget: "Bawah RM10", rating: "4.8", hours: "7.30 PG - 6.00 PTG", menu: "Laksa Sarawak special dengan udang galah, teh C peng special.", notes: "Kuah laksa Sarawak paling autentik di Kuching.", lat: 1.5789, lng: 110.3412 },
+            { id: 1403, name: "Topspot Food Court (Gerai Muslim)", state: "Sarawak", category: "Masakan Panas", location: "Jalan Padungan, Kuching", budget: "Lebih RM20", rating: "4.8", hours: "5.00 PTG - 11.00 MLM", menu: "Sayur midin goreng belacan, ikan terubuk bakar, tiram goreng telur.", notes: "Sayur paku midin rangup wajib dipesan bila ke Sarawak.", lat: 1.5565, lng: 110.3518 },
+            { id: 1404, name: "RJ Ayam Bakar Kuching", state: "Sarawak", category: "Nasi & Lauk", location: "Kuching Waterfront, Sarawak", budget: "RM10 - RM20", rating: "4.7", hours: "4.00 PTG - 12.00 MLM", menu: "Ayam bakar madu berempah, ikan keli penyet, sambal terasi.", notes: "Makan malam santai berdekatan Tebingan Kuching.", lat: 1.5582, lng: 110.3465 }
+        ];
+
+        // State Aplikasi
+        let restaurants = JSON.parse(localStorage.getItem('jomMakan_v3_data')) || defaultRestaurants;
+        let favorites = JSON.parse(localStorage.getItem('jomMakan_v3_fav')) || [];
+        let currentState = 'Semua';
+        let currentCategory = 'Semua';
+        let currentBudget = 'Semua';
+        let currentTab = 'all';
+        let activeModalId = null;
+
+        // State GPS
+        let userCoords = null;
+        let nearMeActive = false;
+
+        // Muat Turun Awal
+        window.onload = function() {
+            const savedTheme = localStorage.getItem('jomMakan_theme') || 'sunset';
+            const savedBg = localStorage.getItem('jomMakan_bg') || 'bg-clean';
+            applyTheme(savedTheme, false);
+            applyBgStyle(savedBg, false);
+            updateFavBadge();
+            renderRestaurants();
+        };
+
+        // Kira Jarak Haversine (KM)
+        function calculateDistance(lat1, lon1, lat2, lon2) {
+            if (!lat1 || !lon1 || !lat2 || !lon2) return null;
+            const R = 6371;
+            const dLat = (lat2 - lat1) * Math.PI / 180;
+            const dLon = (lon2 - lon1) * Math.PI / 180;
+            const a = Math.sin(dLat/2) * Math.sin(dLat/2) +
+                      Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) *
+                      Math.sin(dLon/2) * Math.sin(dLon/2);
+            const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+            return R * c;
+        }
+
+        // Toggle GPS Dekat Saya
+        function toggleNearMe() {
+            if (nearMeActive) {
+                disableNearMe();
+                return;
+            }
+            if (!navigator.geolocation) {
+                alert("Pelayar anda tidak menyokong ciri lokasi GPS.");
+                return;
+            }
+
+            const gpsBtnText = document.getElementById('gpsBtnText');
+            const gpsIcon = document.getElementById('gpsIcon');
+            gpsBtnText.innerText = "Mengesan...";
+            gpsIcon.className = "fa-solid fa-spinner fa-spin theme-text";
+
+            navigator.geolocation.getCurrentPosition(
+                (position) => {
+                    userCoords = {
+                        lat: position.coords.latitude,
+                        lng: position.coords.longitude
+                    };
+                    nearMeActive = true;
+                    document.getElementById('gpsBtn').classList.add('theme-border', 'theme-light-bg', 'dark:bg-zinc-800');
+                    gpsBtnText.innerText = "GPS Aktif";
+                    gpsIcon.className = "fa-solid fa-location-dot text-emerald-500";
+                    document.getElementById('gpsStatusBanner').classList.remove('hidden');
+                    document.getElementById('sortLabel').innerText = "Susunan: Paling Dekat (GPS)";
+                    renderRestaurants();
+                },
+                (error) => {
+                    gpsBtnText.innerText = "Dekat Saya";
+                    gpsIcon.className = "fa-solid fa-location-crosshairs theme-text";
+                    alert("Tidak dapat mengakses lokasi GPS. Sila benarkan kebenaran lokasi pada pelayar telefon anda.");
+                },
+                { enableHighAccuracy: true, timeout: 10000 }
+            );
+        }
+
+        function disableNearMe() {
+            nearMeActive = false;
+            document.getElementById('gpsBtn').classList.remove('theme-border', 'theme-light-bg', 'dark:bg-zinc-800');
+            document.getElementById('gpsBtnText').innerText = "Dekat Saya";
+            document.getElementById('gpsIcon').className = "fa-solid fa-location-crosshairs theme-text";
+            document.getElementById('gpsStatusBanner').classList.add('hidden');
+            document.getElementById('sortLabel').innerText = "Susunan: Pilihan Popular";
+            renderRestaurants();
+        }
+
+        // Render Senarai Kedai
+        function renderRestaurants() {
+            const listEl = document.getElementById('restaurantList');
+            const emptyEl = document.getElementById('emptyState');
+            const searchInput = document.getElementById('searchInput');
+            const query = searchInput.value.toLowerCase().trim();
+
+            document.getElementById('clearSearchBtn').classList.toggle('hidden', query === '');
+
+            let filtered = restaurants.map(r => {
+                const dist = (userCoords && r.lat && r.lng) ? calculateDistance(userCoords.lat, userCoords.lng, r.lat, r.lng) : null;
+                return { ...r, distance: dist };
+            });
+
+            if (currentTab === 'fav') {
+                filtered = filtered.filter(r => favorites.includes(r.id));
+            }
+            if (currentState !== 'Semua') {
+                filtered = filtered.filter(r => r.state === currentState);
+            }
+            if (currentCategory !== 'Semua') {
+                filtered = filtered.filter(r => r.category === currentCategory);
+            }
+            if (currentBudget !== 'Semua') {
+                filtered = filtered.filter(r => r.budget === currentBudget);
+            }
+            if (query) {
+                filtered = filtered.filter(r =>
+                    r.name.toLowerCase().includes(query) ||
+                    r.location.toLowerCase().includes(query) ||
+                    r.state.toLowerCase().includes(query) ||
+                    r.menu.toLowerCase().includes(query)
+                );
+            }
+
+            if (nearMeActive && userCoords) {
+                filtered.sort((a, b) => {
+                    if (a.distance === null) return 1;
+                    if (b.distance === null) return -1;
+                    return a.distance - b.distance;
+                });
+            }
+
+            document.getElementById('resultCount').innerText = filtered.length;
+            listEl.innerHTML = '';
+
+            if (filtered.length === 0) {
+                emptyEl.classList.remove('hidden');
+                return;
+            }
+            emptyEl.classList.add('hidden');
+
+            filtered.forEach(r => {
+                const isFav = favorites.includes(r.id);
+                const imgUrl = categoryImages[r.category] || categoryImages["Masakan Panas"];
+                const distBadge = (nearMeActive && r.distance !== null)
+                    ? `<span class="bg-emerald-500 text-white text-[10px] font-extrabold px-2 py-0.5 rounded-md shadow-xs"><i class="fa-solid fa-person-walking mr-1"></i>${r.distance.toFixed(1)} km</span>`
+                    : '';
+
+                const card = document.createElement('div');
+                card.className = "bg-white dark:bg-zinc-900 rounded-2xl overflow-hidden border border-slate-200/80 dark:border-zinc-800 shadow-sm hover:shadow-md transition group";
+                card.innerHTML = `
+                    <div onclick="openDetail(${r.id})" class="cursor-pointer">
+                        <div class="relative h-36 w-full overflow-hidden">
+                            <img src="${imgUrl}" alt="${r.name}" loading="lazy" class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
+                            <div class="absolute inset-0 bg-gradient-to-t from-black/75 via-black/20 to-transparent"></div>
+                            <div class="absolute top-2.5 left-2.5 flex flex-wrap gap-1.5">
+                                <span class="theme-bg text-white text-[10px] font-extrabold px-2 py-0.5 rounded-md shadow-xs">${r.state}</span>
+                                <span class="bg-black/55 backdrop-blur-xs text-white text-[10px] font-semibold px-2 py-0.5 rounded-md">${r.category}</span>
+                                ${distBadge}
+                            </div>
+                            <button onclick="event.stopPropagation(); toggleFavorite(${r.id})" class="absolute top-2.5 right-2.5 w-8 h-8 rounded-full bg-white/90 dark:bg-zinc-900/90 flex items-center justify-center shadow-sm active:scale-90 transition">
+                                <i class="${isFav ? 'fa-solid text-rose-500' : 'fa-regular text-slate-600 dark:text-slate-300'} fa-heart text-xs"></i>
+                            </button>
+                            <div class="absolute bottom-2.5 left-3 right-3 flex justify-between items-end text-white">
+                                <div>
+                                    <h3 class="font-extrabold text-sm leading-tight drop-shadow-xs">${r.name}</h3>
+                                    <p class="text-[11px] text-white/85 flex items-center mt-0.5"><i class="fa-solid fa-location-dot mr-1 text-amber-400"></i>${r.location}</p>
+                                </div>
+                                <span class="bg-amber-400 text-slate-900 text-[10px] font-extrabold px-1.5 py-0.5 rounded-md flex items-center space-x-0.5 shrink-0">
+                                    <i class="fa-solid fa-star text-[9px]"></i>
+                                    <span>${r.rating || '4.7'}</span>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="p-3.5">
+                            <p class="text-xs text-slate-600 dark:text-slate-300 line-clamp-1"><span class="font-bold text-slate-800 dark:text-slate-100">Menu:</span> ${r.menu}</p>
+                            <div class="flex justify-between items-center mt-2.5 pt-2.5 border-t border-slate-100 dark:border-zinc-800 text-[11px]">
+                                <span class="text-slate-400 font-medium"><i class="fa-regular fa-clock mr-1"></i>${r.hours}</span>
+                                <span class="font-extrabold theme-text bg-slate-100 dark:bg-zinc-800 px-2 py-0.5 rounded-md">${r.budget}</span>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                listEl.appendChild(card);
+            });
+        }
+
+        // Kawalan Penapis
+        function setStateFilter(state) {
+            currentState = state;
+            document.getElementById('activeStateBadge').innerText = state === 'Semua' ? 'Semua Negeri' : state;
+            renderRestaurants();
+        }
+
+        function setCategory(cat) {
+            currentCategory = cat;
+            document.querySelectorAll('.cat-btn').forEach(btn => {
+                btn.className = "cat-btn bg-white dark:bg-zinc-900 text-slate-600 dark:text-slate-300 border border-slate-200 dark:border-zinc-800 text-xs px-3.5 py-1.5 rounded-full font-semibold whitespace-nowrap transition";
+            });
+            const active = document.getElementById(`cat-${cat}`);
+            if (active) active.className = "cat-btn theme-bg text-white text-xs px-3.5 py-1.5 rounded-full font-bold whitespace-nowrap shadow-sm transition";
+            renderRestaurants();
+        }
+
+        function setBudget(bud) {
+            currentBudget = bud;
+            document.querySelectorAll('.bud-btn').forEach(btn => {
+                btn.className = "bud-btn bg-white dark:bg-zinc-900 text-slate-500 dark:text-slate-400 border border-slate-200 dark:border-zinc-800 text-[11px] px-2.5 py-1 rounded-lg font-semibold whitespace-nowrap transition";
+            });
+            const active = document.getElementById(`bud-${bud}`);
+            if (active) active.className = "bud-btn bg-slate-800 dark:bg-slate-200 text-white dark:text-slate-900 text-[11px] px-2.5 py-1 rounded-lg font-bold whitespace-nowrap transition";
+            renderRestaurants();
+        }
+
+        function clearSearch() {
+            document.getElementById('searchInput').value = '';
+            renderRestaurants();
+        }
+
+        function resetFilters() {
+            currentState = 'Semua';
+            currentCategory = 'Semua';
+            currentBudget = 'Semua';
+            document.getElementById('stateFilter').value = 'Semua';
+            document.getElementById('activeStateBadge').innerText = 'Semua Negeri';
+            document.getElementById('searchInput').value = '';
+            setCategory('Semua');
+            setBudget('Semua');
+        }
+
+        function switchTab(tab) {
+            currentTab = tab;
+            const navAll = document.getElementById('nav-all');
+            const navFav = document.getElementById('nav-fav');
+            if (tab === 'all') {
+                navAll.className = "flex flex-col items-center space-y-1 theme-text font-bold transition";
+                navFav.className = "flex flex-col items-center space-y-1 text-slate-400 hover:text-slate-600 font-semibold transition relative";
+            } else {
+                navFav.className = "flex flex-col items-center space-y-1 theme-text font-bold transition relative";
+                navAll.className = "flex flex-col items-center space-y-1 text-slate-400 hover:text-slate-600 font-semibold transition";
+            }
+            renderRestaurants();
+        }
+
+        // Kegemaran
+        function toggleFavorite(id) {
+            const idx = favorites.indexOf(id);
+            if (idx > -1) favorites.splice(idx, 1);
+            else favorites.push(id);
+            localStorage.setItem('jomMakan_v3_fav', JSON.stringify(favorites));
+            updateFavBadge();
+            renderRestaurants();
+            if (activeModalId === id) updateModalFavIcon(id);
+        }
+
+        function updateFavBadge() {
+            const badge = document.getElementById('favBadge');
+            badge.innerText = favorites.length;
+            badge.classList.toggle('hidden', favorites.length === 0);
+        }
+
+        // Randomizer Pintar
+        function spinRandom() {
+            let pool = restaurants;
+            if (currentState !== 'Semua') pool = pool.filter(r => r.state === currentState);
+            if (currentCategory !== 'Semua') pool = pool.filter(r => r.category === currentCategory);
+            if (pool.length === 0) pool = restaurants;
+
+            const dice = document.getElementById('diceIcon');
+            dice.classList.add('fa-spin');
+            setTimeout(() => {
+                dice.classList.remove('fa-spin');
+                const chosen = pool[Math.floor(Math.random() * pool.length)];
+                openDetail(chosen.id);
+            }, 450);
+        }
+
+        // Modal Butiran
+        function openDetail(id) {
+            activeModalId = id;
+            const r = restaurants.find(item => item.id === id);
+            if (!r) return;
+
+            document.getElementById('modalImg').src = categoryImages[r.category] || categoryImages["Masakan Panas"];
+            document.getElementById('modalState').innerText = r.state;
+            document.getElementById('modalCategory').innerText = r.category;
+            document.getElementById('modalName').innerText = r.name;
+            document.getElementById('modalLocation').innerText = r.location;
+            document.getElementById('modalBudget').innerText = r.budget;
+            document.getElementById('modalRating').innerHTML = `<i class="fa-solid fa-star mr-1"></i>${r.rating || '4.7'}`;
+            document.getElementById('modalHours').innerText = r.hours;
+            document.getElementById('modalMenu').innerText = r.menu;
+            document.getElementById('modalNotes').innerText = r.notes;
+
+            const distBadge = document.getElementById('modalDistanceBadge');
+            if (userCoords && r.lat && r.lng) {
+                const d = calculateDistance(userCoords.lat, userCoords.lng, r.lat, r.lng);
+                distBadge.innerText = `${d.toFixed(1)} km dari anda`;
+                distBadge.classList.remove('hidden');
+            } else {
+                distBadge.classList.add('hidden');
+            }
+
+            const query = encodeURIComponent(`${r.name} ${r.location}`);
+            document.getElementById('modalGoogleMapBtn').onclick = () => window.open(`https://www.google.com/maps/search/?api=1&query=${query}`, '_blank');
+            document.getElementById('modalWazeBtn').onclick = () => window.open(`https://waze.com/ul?q=${query}&navigate=yes`, '_blank');
+
+            updateModalFavIcon(id);
+            document.getElementById('detailModal').classList.remove('hidden');
+        }
+
+        function closeDetailModal() {
+            document.getElementById('detailModal').classList.add('hidden');
+            activeModalId = null;
+        }
+
+        function updateModalFavIcon(id) {
+            const isFav = favorites.includes(id);
+            document.getElementById('modalFavIcon').className = isFav
+                ? "fa-solid fa-heart text-rose-500 text-base"
+                : "fa-regular fa-heart text-rose-500 text-base";
+        }
+
+        function toggleModalFav() {
+            if (activeModalId !== null) toggleFavorite(activeModalId);
+        }
+
+        // Modal Tambah Kedai
+        let formLat = null;
+        let formLng = null;
+
+        function openAddModal() {
+            document.getElementById('addModal').classList.remove('hidden');
+        }
+
+        function closeAddModal() {
+            document.getElementById('addModal').classList.add('hidden');
+            document.getElementById('addForm').reset();
+            formLat = null;
+            formLng = null;
+        }
+
+        function captureCurrentLocationForForm() {
+            if (!navigator.geolocation) return alert("GPS tidak disokong.");
+            const input = document.getElementById('addCoords');
+            input.value = "Mengesan koordinat...";
+            navigator.geolocation.getCurrentPosition(
+                (pos) => {
+                    formLat = pos.coords.latitude;
+                    formLng = pos.coords.longitude;
+                    input.value = `${formLat.toFixed(5)}, ${formLng.toFixed(5)}`;
+                },
+                () => {
+                    input.value = "";
+                    alert("Gagal mendapatkan koordinat GPS.");
+                }
+            );
+        }
+
+        function saveNewRestaurant(e) {
+            e.preventDefault();
+            const newPort = {
+                id: Date.now(),
+                name: document.getElementById('addName').value,
+                state: document.getElementById('addState').value,
+                category: document.getElementById('addCategory').value,
+                location: document.getElementById('addLocation').value,
+                budget: document.getElementById('addBudget').value,
+                rating: "5.0",
+                hours: document.getElementById('addHours').value || "Tidak dinyatakan",
+                menu: document.getElementById('addMenu').value,
+                notes: document.getElementById('addNotes').value || "Cadangan komuniti JomMakan.",
+                lat: formLat,
+                lng: formLng
+            };
+            restaurants.unshift(newPort);
+            localStorage.setItem('jomMakan_v3_data', JSON.stringify(restaurants));
+            closeAddModal();
+            renderRestaurants();
+        }
+
+        // Tema & Latar
+        function openThemeModal() { document.getElementById('themeModal').classList.remove('hidden'); }
+        function closeThemeModal() { document.getElementById('themeModal').classList.add('hidden'); }
+
+        function applyTheme(theme, save = true) {
+            document.documentElement.setAttribute('data-theme', theme);
+            if (theme === 'midnight') document.documentElement.classList.add('dark');
+            else document.documentElement.classList.remove('dark');
+            if (save) localStorage.setItem('jomMakan_theme', theme);
+        }
+
+        function applyBgStyle(bgClass, save = true) {
+            document.body.classList.remove('bg-clean', 'bg-pattern', 'bg-gradient');
+            document.body.classList.add(bgClass);
+            if (save) localStorage.setItem('jomMakan_bg', bgClass);
+        }
+
+        function resetDatabase() {
+            restaurants = [...defaultRestaurants];
+            localStorage.setItem('jomMakan_v3_data', JSON.stringify(restaurants));
+            closeThemeModal();
+            renderRestaurants();
+            alert("Pangkalan data 56+ kedai seluruh Malaysia berjaya dikemas kini!");
+        }
+    </script>
+</body>
+</html>
